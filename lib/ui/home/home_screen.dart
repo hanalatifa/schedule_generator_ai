@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:schedule_generator_ai/models/task.dart';
 import 'package:schedule_generator_ai/services/gemini_services.dart';
+import 'package:schedule_generator_ai/ui/home/components/add_task_card.dart';
+import 'package:schedule_generator_ai/ui/home/components/schedule_result_card.dart';
+import 'package:schedule_generator_ai/ui/home/components/task_list_section.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -41,9 +44,17 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: EdgeInsets.all(16),
         children: [
           _buildHeader(),
-          // Letakkan Component Add Task Card disini
-          // Letakkan Component Task List disini
-          _buildGenerateButton()
+          AddTaskCard(onAddTask:(task) => setState(() => tasks.add(task))),
+          SizedBox(height: 16),
+          TaskListSection(
+            tasks: tasks,
+            // ignore: collection_methods_unrelated_type
+            onDelete: (index) => setState(() => tasks.removeAt(index)),
+          ),
+          SizedBox(height: 16),
+          _buildGenerateButton(),
+          SizedBox(height: 16),
+          ScheduleResultCard(schedule: scheduleResult)
         ],
       ),
     );
@@ -77,13 +88,13 @@ class _HomeScreenState extends State<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "plan your day faster",
+                  "Plan Your Day Faster",
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w700
                   ),
                 ),
                 Text(
-                  "Add task and generate",
+                  "Add Task and Generate",
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurfaceVariant
                   ),
